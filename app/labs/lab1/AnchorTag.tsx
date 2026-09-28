@@ -21,7 +21,7 @@ export default function AnchorTag() {
                 My Github
             </a>
             <br />
-            <a href="https://www.bso.org/bso-2026-2027-season?g_acctid=589-788-1247&g_adgroupid=199023339259&g_adid=818883119925&g_adtype=search&g_campaign=BSO_FallWinter_search_nonbrand_30101&g_campaignid=24092547034&g_keyword=boston%20symphony&g_keywordid=kwd-306807429763&g_network=g&gclsrc=aw.ds&gad_source=1&gad_campaignid=24092547034&gbraid=0AAAAAD-WRxxmWX05R7itFKn_bxTMOZUCz&gclid=Cj0KCQjwt9jVBhDXARIsAFSP-6eCuMedYIeGj3dtBY5dYtgvDTdHNd90RtWaJsD1PKY8GmzcwTfjWMIaAtLLEALw_wcB" id="wd-boston-symphony">
+            <a href="https://www.bso.org/bso-2026-2027-season?g_acctid=589-788-1247&g_adgroupid=199023339259&g_adid=818883119925&g_adtype=search&g_campaign=BSO_FallWinter_search_nonbrand_30101&g_campaignid=24092547034&g_keyword=boston%20symphony&g_keywordid=kwd-306807429763&g_network=g&gclsrc=aw.ds&gad_source=1&gad_campaignid=24092547034&gbraid=0AAAAAD-WRxxmWX05R7itFKn_bxTMOZUCz&gclid=Cj0KCQjwt9jVBhDXARIsAFSP-6eCuMedYIeGj3dtBY5dYtgvDTdHNd90RtWaJsD1PKY8GmzcwTfjWMIaAtLLEALw_wcB" id="wd-your-link">
                 Boston Symphony Orchestra
             </a>
             <br />
