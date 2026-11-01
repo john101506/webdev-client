@@ -1,115 +1,67 @@
 import Link from "next/link";
+import * as db from "../../../../database";
 
-export default function AssignmentEditor() {
+export default async function AssignmentEditor({
+  params,
+}: {
+  params: Promise<{ cid: string; aid: string }>;
+}) {
+  const { cid, aid } = await params;
+  const assignment = db.assignments.find((a) => a._id === aid);
   return (
     <div id="wd-assignments-editor">
-      <label htmlFor="wd-name" className="block mb-1 font-medium">Assignment Name</label>
-      <input id="wd-name" defaultValue="A1 - ENV + HTML" className="w-fill rounded border p-1"/>
-      <br />
-      <br />
-      <label htmlFor="wd-description" className="block mb-1 font-medium">Description</label>
-      <textarea id="wd-description" className="w-full rounded border p-1"
-        defaultValue="The assignment is available online Submit a link to the landing page of
-        your Web application running on Vercel." />
-      <br />
+      <label htmlFor="wd-name">Assignment Name</label>
+      <input id="wd-name" defaultValue={assignment?.title ?? ""} /> <br />
+      <span id="wd-assignment-id">Assignment id: {aid}</span> <br /><br />
+      <textarea
+        id="wd-description"
+        defaultValue={assignment?.description ?? ""}
+        rows={8}
+        className="w-full"
+      /> <br />
       <table>
         <tbody>
           <tr>
             <td align="right" valign="top">
-              <label htmlFor="wd-points" className="block mb-1  font-medium">Points</label>
+              <label htmlFor="wd-points">Points</label>
             </td>
             <td>
-              <input id="wd-points" defaultValue={100} className="w-full rounded border p-1" />
-            </td>
-          </tr>
-          {/* Remaining fields from Chapter 1 */}
-          <tr>
-            <td align="right" valign="top">
-              <label htmlFor="wd-group">Assignment Group</label>
-            </td>
-            <td>
-              <select id="wd-group">
-                <option value="ASSIGNMENTS">ASSIGNMENTS</option>
-                <option value="QUIZZES">QUIZZES</option>
-                <option value="EXAMS">EXAMS</option>
-                <option value="PROJECT">PROJECT</option>
-              </select>
+              <input id="wd-points" defaultValue={assignment?.points ?? 100} />
             </td>
           </tr>
           <tr>
             <td align="right" valign="top">
-              <label htmlFor="wd-display-grade-as">Display Grade as</label>
+              <label htmlFor="wd-due-date">Due</label>
             </td>
             <td>
-              <select id="wd-display-grade-as">
-                <option value="PERCENTAGE">Percentage</option>
-                <option value="POINTS">Points</option>
-                <option value="LETTER">Letter Grade</option>
-              </select>
+              <input
+                type="date"
+                id="wd-due-date"
+                defaultValue={assignment?.due}
+              />
             </td>
           </tr>
           <tr>
             <td align="right" valign="top">
-              <label htmlFor="wd-submission-type">Submission Type</label>
-            </td>
-            <td>
-              <select id="wd-submission-type">
-                <option value="ONLINE">Online</option>
-                <option value="PAPER">On Paper</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td align="right" valign="top">
-              Online Entry Options
-            </td>
-            <td>
-              <input type="checkbox" id="wd-text-entry" />
-              <label htmlFor="wd-text-entry">Text Entry</label>
-              <br />
-              <input type="checkbox" id="wd-website-url" />
-              <label htmlFor="wd-website-url">Website URL</label>
-              <br />
-              <input type="checkbox" id="wd-media-recordings" />
-              <label htmlFor="wd-media-recordings">Media Recordings</label>
-              <br />
-              <input type="checkbox" id="wd-student-annotation" />
-              <label htmlFor="wd-student-annotation">Student Annotation</label>
-              <br />
-              <input type="checkbox" id="wd-file-upload" />
-              <label htmlFor="wd-file-upload">File Upload</label>
-            </td>
-          </tr>
-          <tr>
-            <td align="right" valign="top">
-              Assign
-            </td>
-            <td>
-              <label htmlFor="wd-assign-to">Assign to</label>
-              <br />
-              <input id="wd-assign-to" defaultValue="Everyone" />
-              <br />
-              <label htmlFor="wd-due-date" className="block mb-1 font-medium">Due</label>
-              <br />
-              <input type="date" id="wd-due-date" defaultValue="2024-05-13" className="w-full rounded border p-1" />
-              <br />
               <label htmlFor="wd-available-from">Available from</label>
-              <br />
-              <input type="date" id="wd-available-from" defaultValue="2024-06-06" />
-              <br />
-              <label htmlFor="wd-available-until">Until</label>
-              <br />
-              <input type="date" id="wd-available-until" defaultValue="2024-05-13" />
+            </td>
+            <td>
+              <input
+                type="date"
+                id="wd-available-from"
+                defaultValue={assignment?.available}
+              />
             </td>
           </tr>
         </tbody>
       </table>
       <br />
-      <label htmlFor="wd-ai-editor-notes" className="block mb-1 font-medium">Sample notes</label>
-      <textarea id="wd-ai-editor-notes" className="w-full rounded border p-1" />
-      <br />
-      <Link href="/courses/1234/assignments" id="wd-cancel">Cancel</Link>{" "}
-      <Link href="/courses/1234/assignments" id="wd-save">Save</Link>
+      <Link href={`/courses/${cid}/assignments`} id="wd-cancel">
+        Cancel
+      </Link>{" "}
+      <Link href={`/courses/${cid}/assignments`} id="wd-save">
+        Save
+      </Link>
     </div>
   );
 }
