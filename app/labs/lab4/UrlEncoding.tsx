@@ -86,6 +86,21 @@ export default function UrlEncoding() {
       >
         {a} + {b} + {c} → Path Params (Link)
       </Link>
+      <h4>Two numbers:</h4>
+      <Link
+        href={`${baseUrl}/query-params?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`}
+        className="mb-2 block w-full rounded bg-blue-600 px-3 py-1.5 text-center text-sm font-medium text-white no-underline"
+        id="wd-url-query-link-two"
+      >
+        {a} + {b} → Query Params (Link)
+      </Link>
+      <Link
+        href={`${baseUrl}/path-params/${encodeURIComponent(a)}/${encodeURIComponent(b)}`}
+        className="mb-2 block w-full rounded bg-blue-600 px-3 py-1.5 text-center text-sm font-medium text-white no-underline"
+        id="wd-url-path-link-two"
+      >
+        {a} + {b} → Path Params (Link)
+      </Link>
       <hr />
     </div>
   );
