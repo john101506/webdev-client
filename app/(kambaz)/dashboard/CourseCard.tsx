@@ -1,16 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useCoursesStore, type Course } from "../store/coursesStore";
 
 export default function CourseCard({
   course,
+  onEdit,
+  enrolled,
+  showEnroll,
+  onToggleEnroll,
 }: {
-  course: {
-    _id: string;
-    name: string;
-    description: string;
-    image: string;
-  };
+  course: Course;
+  onEdit: () => void;
+  enrolled: boolean;
+  showEnroll: boolean;
+  onToggleEnroll: () => void;
 }) {
+  const deleteCourse = useCoursesStore((state) => state.deleteCourse);
   return (
     <div className="wd-dashboard-course w-[300px] max-w-full overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm">
       <Link
@@ -36,6 +41,43 @@ export default function CourseCard({
             className="inline-flex items-center justify-center rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white"
           >
             Go
+          </button>
+          {showEnroll && (
+            <button
+              type="button"
+              id="wd-enroll-toggle-click"
+              className={`ms-2 inline-flex items-center justify-center rounded px-3 py-1.5 text-sm font-medium text-white ${
+                enrolled ? "bg-red-600" : "bg-green-600"
+              }`}
+              onClick={(event) => {
+                event.preventDefault();
+                onToggleEnroll();
+              }}
+            >
+              {enrolled ? "Unenroll" : "Enroll"}
+            </button>
+          )}
+          <button
+            type="button"
+            id="wd-edit-course-click"
+            className="ms-2 inline-flex items-center justify-center rounded bg-yellow-400 px-3 py-1.5 text-sm font-medium"
+            onClick={(event) => {
+              event.preventDefault();
+              onEdit();
+            }}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            id="wd-delete-course-click"
+            className="ms-2 inline-flex items-center justify-center rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white"
+            onClick={(event) => {
+              event.preventDefault();
+              deleteCourse(course._id);
+            }}
+          >
+            Delete
           </button>
         </div>
       </Link>
