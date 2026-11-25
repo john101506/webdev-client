@@ -6,11 +6,11 @@ import * as client from "./client";
 
 export default function WorkingWithRemoteArraysAsynchronously() {
   const [todos, setTodos] = useState<any[]>([]);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const fetchTodos = async () => {
     setTodos(await client.fetchTodos());
   };
-  const removeTodo = async (todo) => {
+  const removeTodo = async (todo: any) => {
     setTodos(await client.removeTodo(todo));
   };
   const createNewTodo = async () => {
@@ -23,22 +23,22 @@ export default function WorkingWithRemoteArraysAsynchronously() {
     });
     setTodos([...todos, newTodo]);
   };
-  const deleteTodo = async (todo) => {
+  const deleteTodo = async (todo: any) => {
     try {
       await client.deleteTodo(todo);
       setTodos(todos.filter((t) => t.id !== todo.id));
-    } catch (error) {
+    } catch (error: any) {
       setErrorMessage(error.response.data.message);
     }
   };
-  const editTodo = (todo) => {
+  const editTodo = (todo: any) => {
     setTodos(todos.map((t) => (t.id === todo.id ? { ...todo, editing: true } : t)));
   };
-  const updateTodo = async (todo) => {
+  const updateTodo = async (todo: any) => {
     try {
       await client.updateTodo(todo);
       setTodos(todos.map((t) => (t.id === todo.id ? todo : t)));
-    } catch (error) {
+    } catch (error: any) {
       setErrorMessage(error.response.data.message);
     }
   };

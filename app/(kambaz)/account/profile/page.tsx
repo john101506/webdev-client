@@ -19,6 +19,7 @@ export default function Profile() {
   }, [currentUser, router]);
 
   const updateProfile = async () => {
+    if (!profile) return;
     const user = await client.updateUser(profile);
     setCurrentUser(user);
   };
