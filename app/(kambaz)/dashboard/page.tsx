@@ -1,32 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CourseCard from "./CourseCard";
+import * as client from "../courses/client";
 import {
   emptyCourse,
   useCoursesStore,
   type Course,
 } from "../store/coursesStore";
 import { useAccountContext } from "../account/AccountContext";
-import { useEnrollmentsStore } from "../store/enrollmentsStore";
 
 export default function Dashboard() {
   const courses = useCoursesStore((state) => state.courses);
   const addCourse = useCoursesStore((state) => state.addCourse);
   const updateCourse = useCoursesStore((state) => state.updateCourse);
+  const deleteCourse = useCoursesStore((state) => state.deleteCourse);
+  const setCourses = useCoursesStore((state) => state.setCourses);
   const [course, setCourse] = useState<Course>(emptyCourse);
   const { currentUser } = useAccountContext();
-  const enrollments = useEnrollmentsStore((state) => state.enrollments);
-  const enroll = useEnrollmentsStore((state) => state.enroll);
-  const unenroll = useEnrollmentsStore((state) => state.unenroll);
   const [showAllCourses, setShowAllCourses] = useState(false);
+  const [myCourseIds, setMyCourseIds] = useState<string[]>([]);
 
-  const isEnrolled = (courseId: string) =>
-    !!currentUser &&
-    enrollments.some((e) => e.user === currentUser._id && e.course === courseId);
+  const isEnrolled = (courseId: string) => myCourseIds.includes(courseId);
 
-  const visibleCourses =
-    currentUser && !showAllCourses ? courses.filter((c) => isEnrolled(c._id)) : courses;
+  const load = async () => {
+    const myCourses = await client.findMyCourses();
+    setMyCourseIds(myCourses.map((c: Course) => c._id));
+    setCourses(showAllCourses ? await client.fetchAllCourses() : myCourses);
+  };
+
+  useEffect(() => {
+    load();
+  }, [currentUser, showAllCourses]);
+
+  const onAddCourse = async () => {
+    const newCourse = await client.createCourse(course);
+    addCourse(newCourse);
+    setMyCourseIds([...myCourseIds, newCourse._id]);
+  };
+
+  const onToggleEnroll = async (courseId: string) => {
+    if (!currentUser) return;
+    if (isEnrolled(courseId)) {
+      await client.unenrollFromCourse(currentUser._id, courseId);
+    } else {
+      await client.enrollIntoCourse(currentUser._id, courseId);
+    }
+    await load();
+  };
+
+  const onDeleteCourse = async (courseId: string) => {
+    await client.deleteCourse(courseId);
+    deleteCourse(courseId);
+  };
+
+  const onUpdateCourse = async () => {
+    const saved = await client.updateCourse(course);
+    updateCourse(saved);
+  };
+
+  const visibleCourses = courses;
 
   return (
     <div id="wd-dashboard">
@@ -56,7 +89,7 @@ export default function Dashboard() {
           type="button"
           className="rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white"
           id="wd-add-new-course-click"
-          onClick={() => addCourse(course)}
+          onClick={onAddCourse}
         >
           Add
         </button>
@@ -64,7 +97,7 @@ export default function Dashboard() {
           type="button"
           className="rounded bg-yellow-400 px-3 py-1.5 text-sm font-medium"
           id="wd-update-course-click"
-          onClick={() => updateCourse(course)}
+          onClick={onUpdateCourse}
         >
           Update
         </button>
@@ -107,13 +140,10 @@ export default function Dashboard() {
             key={c._id}
             course={c}
             onEdit={() => setCourse(c)}
+            onDelete={() => onDeleteCourse(c._id)}
             enrolled={isEnrolled(c._id)}
             showEnroll={!!currentUser}
-            onToggleEnroll={() => {
-              if (!currentUser) return;
-              if (isEnrolled(c._id)) unenroll(currentUser._id, c._id);
-              else enroll(currentUser._id, c._id);
-            }}
+            onToggleEnroll={() => onToggleEnroll(c._id)}
           />
         ))}
       </div>

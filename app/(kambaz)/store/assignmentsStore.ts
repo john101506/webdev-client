@@ -19,16 +19,14 @@ type AssignmentsStore = {
   addAssignment: (assignment: Assignment) => void;
   deleteAssignment: (assignmentId: string) => void;
   updateAssignment: (assignment: Assignment) => void;
+  setAssignments: (assignments: Assignment[]) => void;
 };
 
 export const useAssignmentsStore = create<AssignmentsStore>((set) => ({
-  assignments: assignmentsJson,
+  assignments: [],
   addAssignment: (assignment) =>
     set((state) => ({
-      assignments: [
-        ...state.assignments,
-        { ...assignment, _id: crypto.randomUUID() },
-      ],
+      assignments: [...state.assignments, assignment],
     })),
   deleteAssignment: (assignmentId) =>
     set((state) => ({
@@ -40,4 +38,5 @@ export const useAssignmentsStore = create<AssignmentsStore>((set) => ({
         a._id === assignment._id ? assignment : a,
       ),
     })),
+  setAssignments: (assignments) => set({ assignments }),
 }));
