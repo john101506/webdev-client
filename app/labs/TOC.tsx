@@ -12,6 +12,8 @@ const LINKS = [
   { href: "/labs/lab5", id: "wd-lab5-link", label: "Lab 5", match: (p: string) => p.includes("/lab5") },
   { href: "/", id: "wd-kambaz-link", label: "Kambaz", match: () => false },
   { href: "https://kambaz.dev/book/ch3", id: "wd-book-ch3-link", label: "Book Ch3", match: () => false },
+  { href: "https://github.com/john101506/webdev-server", id: "wd-server-github-link", label: "Node GitHub", match: () => false },
+  { href: "https://webdev-server-g6u2.onrender.com", id: "wd-server-render-link", label: "Render Server", match: () => false },
 ] as const;
 
 /* 
